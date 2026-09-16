@@ -1,12 +1,14 @@
-##Agrilik 
+# Agrilik
 
-En developpement 
+En developpement
 
-##Description
-    un site web pour mettre en realtion directe les petits agriculteur de la region de vakinakaratra avec les acheteurs sans intermediaire
+## Description
 
-## stack tecnique
-    Laravel 13
-    PHP
-    Blade + Tailwindcss
-    sqlite /Mysql
+un site web pour mettre en relation directe les petits agriculteurs de la region de vakinakaratra avec les acheteurs sans intermediaire
+
+## Stack technique
+
+- Laravel 13
+- PHP
+- Blade + Tailwindcss
+- sqlite / Mysql
