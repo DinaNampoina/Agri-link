@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Annonce extends Model
+{
+    protected $fillable = [
+        'titre',
+        'description',
+        'prix',
+        'user_id',
+        'produit_id',
+        'region',
+        'quantite',
+        'unite',
+        'chemin_image',
+        'statut'
+    ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function produit()
+    {
+        return $this->belongsTo(Produit::class);
+    }
+}
