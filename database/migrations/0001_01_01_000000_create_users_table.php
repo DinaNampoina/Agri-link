@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('localisation');
             $table->enum('role',['vendeur','admin'])->default('vendeur');
             $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
         });
 
