@@ -66,11 +66,11 @@ class AnnonceController extends Controller
     }
 
     public function show(string $id)
-    {
-        $annonce = Annonce::with(['user', 'produit'])->findOrFail($id);
+{
+    $annonce = Annonce::with(['user', 'produit'])->findOrFail($id);
 
-        return view('annonces.show', compact('annonce'));
-    }
+    return view('annonces.show', compact('annonce'));
+}
 
     public function edit(string $id)
     {
