@@ -21,25 +21,26 @@ class AnnonceController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'titre' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'quantite' => ['required', 'integer', 'min:1'],
-            'unite' => ['required', 'string', 'max:50'],
-            'prix' => ['required', 'numeric', 'min:0'],
-            'region' => ['required', 'string', 'max:255'],
-            'produit_id' => ['required', 'exists:produits,id'],
-            'chemin_image' => ['required', 'image', 'max:2048'],
-        ]);
+{
+    $validated = $request->validate([
+        'titre' => ['required', 'string', 'max:255'],
+        'description' => ['nullable', 'string'],
+        'quantite' => ['required', 'integer', 'min:1'],
+        'unite' => ['required', 'string', 'max:50'],
+        'prix' => ['required', 'numeric', 'min:0'],
+        'region' => ['required', 'string', 'max:255'],
+        'produit_id' => ['required', 'exists:produits,id'],
+        'chemin_image' => ['required', 'image', 'max:2048'],
+    ]);
 
-        $validated['user_id'] = Auth::id();
-        $validated['statut'] = 'disponible';
+    $validated['chemin_image'] = $request->file('chemin_image')->store('annonces', 'public');
+    $validated['user_id'] = Auth::id();
+    $validated['statut'] = 'disponible';
 
-        Annonce::create($validated);
+    Annonce::create($validated);
 
-        return redirect()->route('annonces.index');
-    }
+    return redirect()->route('annonces.index');
+}
 
     public function show(string $id)
     {
