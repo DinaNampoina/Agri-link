@@ -18,12 +18,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('annonces', AnnonceController::class)
-    ->except(['create', 'store', 'edit', 'update', 'destroy']);
-
 Route::middleware('auth')->group(function () {
     Route::resource('annonces', AnnonceController::class)
         ->only(['create', 'store', 'edit', 'update', 'destroy']);
 });
+
+Route::resource('annonces', AnnonceController::class)
+    ->except(['create', 'store', 'edit', 'update', 'destroy']);
 
 require __DIR__.'/auth.php';
