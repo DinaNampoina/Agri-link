@@ -16,26 +16,28 @@
             @endif
 
             <div class="bg-white dark:bg-brand-900 shadow-sm rounded-lg overflow-hidden">
-                <table class="w-full text-sm">
-                    <thead class="bg-brand-50 dark:bg-brand-800 text-left">
+                <table class="w-full text-sm table-fixed">
+                    <thead class="bg-brand-50 dark:bg-brand-800">
                         <tr>
-                            <th class="px-4 py-2">Nom</th>
-                            <th class="px-4 py-2">Annonces liées</th>
-                            <th class="px-4 py-2">Actions</th>
+                            <th class="w-1/2 px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wide">Nom</th>
+                            <th class="w-1/4 px-4 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wide">Annonces liées</th>
+                            <th class="w-1/4 px-4 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wide">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-brand-100 dark:divide-brand-800">
                         @foreach ($produits as $produit)
-                            <tr class="border-t border-brand-100 dark:border-brand-800">
-                                <td class="px-4 py-2">{{ $produit->nom }}</td>
-                                <td class="px-4 py-2">{{ $produit->annonces_count }}</td>
-                                <td class="px-4 py-2 flex gap-3">
-                                    <a href="{{ route('admin.produits.edit', $produit) }}" class="text-accent-600 dark:text-accent-400">Modifier</a>
-                                    <form action="{{ route('admin.produits.destroy', $produit) }}" method="POST" onsubmit="return confirm('Supprimer ce produit ?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600">Supprimer</button>
-                                    </form>
+                            <tr class="hover:bg-brand-50/50 dark:hover:bg-brand-800/50">
+                                <td class="px-4 py-3 text-left text-gray-800 dark:text-gray-200">{{ $produit->nom }}</td>
+                                <td class="px-4 py-3 text-center text-gray-600 dark:text-gray-400">{{ $produit->annonces_count }}</td>
+                                <td class="px-4 py-3 text-right">
+                                    <div class="flex justify-end gap-3">
+                                        <a href="{{ route('admin.produits.edit', $produit) }}" class="text-accent-600 dark:text-accent-400 hover:underline">Modifier</a>
+                                        <form action="{{ route('admin.produits.destroy', $produit) }}" method="POST" onsubmit="return confirm('Supprimer ce produit ?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:underline">Supprimer</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
