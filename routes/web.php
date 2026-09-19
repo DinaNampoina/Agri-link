@@ -3,11 +3,18 @@
 use App\Http\Controllers\AnnonceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $annonces = Auth::user()->annonces();
+
+    return view('dashboard', [
+        'total' => $annonces->count(),
+        'disponibles' => (clone $annonces)->where('statut', 'disponible')->count(),
+        'vendues' => (clone $annonces)->where('statut', 'vendue')->count(),
+    ]);
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
