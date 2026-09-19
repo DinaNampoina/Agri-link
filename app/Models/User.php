@@ -28,4 +28,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function annonces()
+    {
+        return $this->hasMany(Annonce::class);
+    }
 }

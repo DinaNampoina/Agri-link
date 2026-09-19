@@ -11,7 +11,8 @@ class AnnonceController extends Controller
 {
     public function index()
     {
-        //
+        $annonces = Annonce::where('user_id', Auth::id())->latest()->get();
+        return view('annonces.index', compact('annonces'));
     }
 
     public function create()
@@ -25,13 +26,34 @@ class AnnonceController extends Controller
     $validated = $request->validate([
         'titre' => ['required', 'string', 'max:255'],
         'description' => ['nullable', 'string'],
-        'quantite' => ['required', 'integer', 'min:1'],
-        'unite' => ['required', 'string', 'max:50'],
+        'quantite' => ['required', 'numeric', 'min:0.1'],
+        'unite' => ['required'],
+        'nouvelle_unite' => ['required_if:unite,autre', 'nullable', 'string', 'max:50'],
         'prix' => ['required', 'numeric', 'min:0'],
-        'region' => ['required', 'string', 'max:255'],
-        'produit_id' => ['required', 'exists:produits,id'],
+        'region' => ['required'],
+        'nouvelle_region' => ['required_if:region,autre', 'nullable', 'string', 'max:255'],
+        'produit_id' => ['required'],
+        'nouveau_produit' => ['required_if:produit_id,autre', 'nullable', 'string', 'max:255'],
         'chemin_image' => ['required', 'image', 'max:2048'],
     ]);
+
+    if ($validated['produit_id'] === 'autre') {
+        $nom = ucfirst(strtolower(trim($validated['nouveau_produit'])));
+        $produit = Produit::firstOrCreate(['nom' => $nom]);
+        $validated['produit_id'] = $produit->id;
+    } else {
+        Produit::findOrFail($validated['produit_id']);
+    }
+
+    if ($validated['unite'] === 'autre') {
+        $validated['unite'] = trim($validated['nouvelle_unite']);
+    }
+
+    if ($validated['region'] === 'autre') {
+        $validated['region'] = trim($validated['nouvelle_region']);
+    }
+
+    unset($validated['nouveau_produit'], $validated['nouvelle_unite'], $validated['nouvelle_region']);
 
     $validated['chemin_image'] = $request->file('chemin_image')->store('annonces', 'public');
     $validated['user_id'] = Auth::id();
@@ -39,7 +61,7 @@ class AnnonceController extends Controller
 
     Annonce::create($validated);
 
-    return redirect()->route('annonces.index');
+    return redirect()->route('annonces.index')->with('success', 'Votre annonce a bien été publiée !');
 }
 
     public function show(string $id)
