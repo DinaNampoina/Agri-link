@@ -26,4 +26,12 @@ Route::middleware('auth')->group(function () {
 Route::resource('annonces', AnnonceController::class)
     ->except(['create', 'store', 'edit', 'update', 'destroy']);
 
-require __DIR__.'/auth.php';
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('produits', \App\Http\Controllers\Admin\ProduitController::class)->except('show');
+    Route::get('annonces', [\App\Http\Controllers\Admin\AnnonceController::class, 'index'])->name('annonces.index');
+    Route::delete('annonces/{annonce}', [\App\Http\Controllers\Admin\AnnonceController::class, 'destroy'])->name('annonces.destroy');
+    Route::get('users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+});
+
+require __DIR__ . '/auth.php';
