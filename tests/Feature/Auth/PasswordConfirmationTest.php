@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 test('confirm password screen can be rendered', function () {
     $user = User::factory()->create();
@@ -11,10 +12,12 @@ test('confirm password screen can be rendered', function () {
 });
 
 test('password can be confirmed', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'password' => Hash::make('password123'),
+    ]);
 
     $response = $this->actingAs($user)->post('/confirm-password', [
-        'password' => 'password',
+        'password' => 'password123',
     ]);
 
     $response->assertRedirect();
@@ -22,7 +25,9 @@ test('password can be confirmed', function () {
 });
 
 test('password is not confirmed with invalid password', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'password' => Hash::make('password123'),
+    ]);
 
     $response = $this->actingAs($user)->post('/confirm-password', [
         'password' => 'wrong-password',
